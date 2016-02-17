@@ -4,6 +4,8 @@ import sys;
 import re;
 
 targetName = sys.argv[1]
+if (re.match("(\w+).java", targetName)):
+	targetName = targetName[0:re.match("\.", targetName)]
 targetFile = open(targetName + ".java", "r")
 
 testName = targetName + "Test";
@@ -20,8 +22,12 @@ for line in targetFile.readlines():
 			+ " { MockitoAnnotations.initMocks(this); }\n\n")
 
 	elif (re.match("(\s+)private", line)):	
-		variableType = re.search('(\s+)private(\W)(\w+)(\W)', line).group(3)
+		variableType = re.search('(\s+)?private( static)?( final)'
+			+ '?(\W)(\w+)(\[\])?(\W)(\w+)( =(.+))?', line).group(5)
 		variable = re.search('(.+)\s(.+);', line).group(2).capitalize()
+
+		print variableType
+		print variable
 		testFile.write("\t@Test\n\tpublic void testGet" + variable + "() {\n\t\t" + className 
 			+ ".get" + variable + "();\n\t}\n\n")
 
