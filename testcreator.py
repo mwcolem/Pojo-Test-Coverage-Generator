@@ -5,7 +5,10 @@ import re;
 
 targetName = sys.argv[1]
 if (re.match("(\w+).java", targetName)):
-	targetName = targetName[0:re.match("\.", targetName)]
+	targetName = targetName[0:targetName.index(".")]
+
+print targetName
+
 targetFile = open(targetName + ".java", "r")
 
 testName = targetName + "Test";
@@ -28,20 +31,19 @@ for line in targetFile.readlines():
 
 		print variableType
 		print variable
-		testFile.write("\t@Test\n\tpublic void testGet" + variable + "() {\n\t\t" + className 
-			+ ".get" + variable + "();\n\t}\n\n")
-
-		testFile.write("\t@Test\n\tpublic void testSet" + variable + "() {\n\t\t" + className
-			+ ".set" + variable + "(")
+		testFile.write("\t@Test\n\tpublic void test" + variable + "() {\n\t\t")
 		if (variableType=="int"):
-			testFile.write("1")
+			testFile.write(className + ".set" + variable + "(1);\n\t\t")
+			testFile.write(className + ".get" + variable + "();\n\t")
 		elif (variableType=="String"):
 			testFile.write("\"\"")
 		elif (variableType=="long"):
-			testFile.write("1l")
+			testFile.write(className + ".set" + variable + "1l);\n\t\t")
+			testFile.write(className + ".get" + variable + "();\n\t")
 		else:
-			testFile.write("new " + variableType.capitalize() + "()")
-		testFile.write(");\n\t}\n\n")
+			testFile.write(className + ".set(new " + variableType.capitalize() + "());\n\t\t")
+			testFile.write(className + ".get" + variable + "();\n\t")
+		testFile.write("}\n\n")
 
 testFile.write("}\n");
 
