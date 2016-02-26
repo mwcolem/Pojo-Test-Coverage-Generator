@@ -16,8 +16,6 @@ with open(targetName + ".java", "r") as lines:
 	for line in lines:
 		array.append(line)
 
-close(targetName + ".java")
-
 testName = targetName + "Test";
 testFile = open(testName+".java", "w")
 className = targetName[0].lower() + targetName[1:]
