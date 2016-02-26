@@ -32,9 +32,9 @@ for line in array:
 			+ " { MockitoAnnotations.initMocks(this); }\n\n")
 
 	elif (re.match("(\s+)private", line)):	
-		variableType = re.search('(\s+)?private( static)?( transient)?( final)'
-			+ '?(\W)(\w+)(\[\])?(\W)(\w+)( =(.+))?', line).group(6)
-		variable = re.search('(.+)\s(.+);', line).group(2)
+		variableType = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)( =(.+))?', line).group(6)
+		#variable = re.search('(.+)\s(.+);', line).group(2)
+		variable = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)( =(.+))?', line).group(10)
 		variable = variable[0].capitalize() + variable[1:]
 		print variableType
 		print variable
@@ -48,6 +48,10 @@ for line in array:
 			testFile.write(className + ".set" + variable + "(1l);\n\t")
 		elif (variableType=="boolean"):
 			testFile.write(className + ".set" + variable + "(true);\n\t")
+		elif (variableType=="List<String>"):
+			testFile.write("LinkedList<String> stringList = new LinkedList<>();\n\t\t")
+			testFile.write("stringList.add(\"a\");\n\t\t")
+			testFile.write(className + ".set" + variable + "(stringList);\n\t")
 		else:
 			testVar = "test" + variableType.capitalize()
 			testFile.write(variableType.capitalize() + " " + testVar + " = new ")
