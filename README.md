@@ -9,7 +9,8 @@ Assumes correct coding conventions, IE private class variables and public
 getters and setters named appropriately. For example a private int "number" would
 have public getter and setter "getNumber()" and "setNumber(int newNumber)".
 
+Only tested on nix systems, because why are you writing code in Windows?
 
 ### To execture use:
 
-    python testcreaator.py [name of Java class]
+    python testcreator.py [name of Java class]
