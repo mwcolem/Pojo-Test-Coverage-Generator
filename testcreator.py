@@ -31,10 +31,8 @@ for line in array:
 		testFile.write("public class " + testName + " { " + '\n\t@Spy\n\tprivate ' + targetName + " "
 		        + className + ";\n\n\t@Before\n\tpublic void setup() " 
 			+ " { MockitoAnnotations.initMocks(this); }\n\n")
-
 	elif (re.match("(\s+)private", line)):	
 		variableType = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)( =(.+))?', line).group(6)
-		#variable = re.search('(.+)\s(.+);', line).group(2)
 		variable = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)( =(.+))?', line).group(10)
 		variable = variable[0].capitalize() + variable[1:]
 		print variableType
