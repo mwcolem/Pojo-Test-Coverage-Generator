@@ -7,20 +7,21 @@ targetName = sys.argv[1]
 if (re.match("(\w+).java", targetName)):
 	targetName = targetName[0:targetName.index(".")]
 
-print targetName
-
-#targetFile = open(targetName + ".java", "r")
-
 with open(targetName + ".java", "r") as lines:
 	array = list()
 	for line in lines:
 		array.append(line)
 
-testName = targetName + "Test";
+testName = targetName
+if (re.match("(.+)/(.+)", targetName)):
+	if (re.match("(.+)main(.+)", targetName)):
+        	testName = targetName.replace("main", "test")
+
+testName = testName + "Test";
 testFile = open(testName+".java", "w")
 className = targetName[0].lower() + targetName[1:]
 
-#for line in targetFile.readlines():
+print testName
 for line in array:
 	if (re.match("package(.+)", line)):
 		testFile.write(line + "\n")
