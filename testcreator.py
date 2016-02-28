@@ -47,10 +47,15 @@ for line in array:
 			testFile.write(className + ".set" + variable + "(1l);\n\t")
 		elif (variableType=="boolean"):
 			testFile.write(className + ".set" + variable + "(true);\n\t")
-		elif (variableType=="List<String>"):
-			testFile.write("LinkedList<String> stringList = new LinkedList<>();\n\t\t")
-			testFile.write("stringList.add(\"a\");\n\t\t")
-			testFile.write(className + ".set" + variable + "(stringList);\n\t")
+		elif (re.match('List(\W)(\S+)(\W)',variableType)):
+			objectListed = re.match('List(\W)(\S+)(\W)',variableType).group(2)
+			print objectListed
+			testFile.write(variableType + " testList = new LinkedList();\n\t\t") 
+			testFile.write("testList.add(new " + objectListed + "());\n\t\t")
+			testFile.write(className + ".set" + variable + "(testList);\n\t")
+#			testFile.write("LinkedList<String> stringList = new LinkedList<>();\n\t\t")
+#			testFile.write("stringList.add(\"a\");\n\t\t")
+#			testFile.write(className + ".set" + variable + "(stringList);\n\t")
 		else:
 			testVar = "test" + variableType.capitalize()
 			testFile.write(variableType.capitalize() + " " + testVar + " = new ")
