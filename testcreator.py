@@ -32,8 +32,8 @@ for line in array:
 		        + className + ";\n\n\t@Before\n\tpublic void setup() " 
 			+ " { MockitoAnnotations.initMocks(this); }\n\n")
 	elif (re.match("(\s+)private", line)):	
-		variableType = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)( =(.+))?', line).group(6)
-		variable = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)( =(.+))?', line).group(10)
+		variableType = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)(\W)?(\s=(.+))?', line).group(6)
+		variable = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)(\W)?(\s=(.+))?', line).group(10)
 		variable = variable[0].capitalize() + variable[1:]
 		print variableType
 		print variable
@@ -49,13 +49,9 @@ for line in array:
 			testFile.write(className + ".set" + variable + "(true);\n\t")
 		elif (re.match('List(\W)(\S+)(\W)',variableType)):
 			objectListed = re.match('List(\W)(\S+)(\W)',variableType).group(2)
-			print objectListed
 			testFile.write(variableType + " testList = new LinkedList();\n\t\t") 
 			testFile.write("testList.add(new " + objectListed + "());\n\t\t")
 			testFile.write(className + ".set" + variable + "(testList);\n\t")
-#			testFile.write("LinkedList<String> stringList = new LinkedList<>();\n\t\t")
-#			testFile.write("stringList.add(\"a\");\n\t\t")
-#			testFile.write(className + ".set" + variable + "(stringList);\n\t")
 		else:
 			testVar = "test" + variableType.capitalize()
 			testFile.write(variableType.capitalize() + " " + testVar + " = new ")
