@@ -4,7 +4,7 @@ import sys;
 import re;
 
 targetName = sys.argv[1]
-if (re.match("(\w+).java", targetName)):
+if (re.match("(.+)\.java", targetName)):
 	targetName = targetName[0:targetName.index(".")]
 
 with open(targetName + ".java", "r") as lines:
@@ -14,8 +14,9 @@ with open(targetName + ".java", "r") as lines:
 
 testName = targetName
 if (re.match("(.+)/(.+)", targetName)):
-	if (re.match("(.+)main(.+)", targetName)):
-        	testName = targetName.replace("main", "test")
+	if (re.match("(\W)(main)(\W)", targetName)):
+        	testName = targetName.replace("/main/", "/test/")
+	targetName = re.match("(.+)/(.+)", targetName).group(2)
 
 testName = testName + "Test";
 testFile = open(testName+".java", "w")
@@ -28,7 +29,7 @@ for line in array:
 		testFile.write("import org.junit.Before;\nimport org.junit.Test;\nimport org.mockito.Spy;\n"
 			+ "import org.mockito.MockitoAnnotations;\nimport static org.hamcrest.MatcherAssert.assertThat;\n"
 			+ "import static org.hamcrest.core.Is.is;\n\n")
-		testFile.write("public class " + testName + " { " + '\n\t@Spy\n\tprivate ' + targetName + " "
+		testFile.write("public class " + targetName + "Test { " + '\n\t@Spy\n\tprivate ' + targetName + " "
 		        + className + ";\n\n\t@Before\n\tpublic void setup() " 
 			+ " { MockitoAnnotations.initMocks(this); }\n\n")
 	elif (re.match("(\s+)private", line)):	
