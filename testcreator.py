@@ -41,8 +41,8 @@ for line in array:
 		testFile.write("\t@Test\n\tpublic void test" + variable + "Methods() {\n\t\t")
 		if (variableType=="int" or variableType=="Integer"):
 			testFile.write(className + ".set" + variable + "(1);\n\t")
-		if (variableType=="double" or variableType=="Double"):
-			testFile.write(classname + ".set" + variable + "(1.0);\n\t")
+		elif (variableType=="double" or variableType=="Double"):
+			testFile.write(className + ".set" + variable + "(1.0);\n\t")
 		elif (variableType=="String"):
 			testFile.write("String testText = \"testText\";\n\t\t")
 			testFile.write(className + ".set" + variable + "(testText);\n\t")
