@@ -15,7 +15,7 @@ with open(targetName + ".java", "r") as lines:
 testName = targetName
 if (re.match("(.+)/(.+)", targetName)):
 	if (re.match("(\W)(main)(\W)", targetName)):
-        	testName = targetName.replace("/main/", "/test/")
+		print "gets to replace"
 	targetName = re.match("(.+)/(.+)", targetName).group(2)
 
 testName = testName + "Test";
@@ -28,7 +28,7 @@ for line in array:
 		testFile.write(line + "\n")
 		testFile.write("import org.junit.Before;\nimport org.junit.Test;\nimport org.mockito.Spy;\n"
 			+ "import org.mockito.MockitoAnnotations;\nimport static org.hamcrest.MatcherAssert.assertThat;\n"
-			+ "import static org.hamcrest.core.Is.is;\n\n")
+			+ "import static org.hamcrest.core.Is.is;\nimport java.util.LinkedList;\n\n")
 		testFile.write("public class " + targetName + "Test { " + '\n\t@Spy\n\tprivate ' + targetName + " "
 		        + className + ";\n\n\t@Before\n\tpublic void setup() " 
 			+ " { MockitoAnnotations.initMocks(this); }\n\n")
@@ -52,13 +52,18 @@ for line in array:
 			testFile.write(className + ".set" + variable + "(true);\n\t")
 		elif (re.match('List(\W)(\S+)(\W)',variableType)):
 			objectListed = re.match('List(\W)(\S+)(\W)',variableType).group(2)
-			testFile.write(variableType + " testList = new LinkedList();\n\t\t") 
+			testFile.write("LinkedList<" + objectListed + "> testList = new LinkedList<>();\n\t\t") 
 			testFile.write("testList.add(new " + objectListed + "());\n\t\t")
 			testFile.write(className + ".set" + variable + "(testList);\n\t")
+		elif (re.match('Set(\W)(\S+)(\W)',variableType)):
+			objectListed = re.match('Set\W)(\S+)(\W)',variableType).group(2)
+			testFile.write("Set< + " + objectListed + "> testSet = new HashSet<>();\n\t\t") 
+			testFile.write("testSet.add(new " + objectListed + "());\n\t\t")
+			testFile.write(className + ".set" + variable + "(testSet);\n\t")
 		else:
-			testVar = "test" + variableType.capitalize()
-			testFile.write(variableType.capitalize() + " " + testVar + " = new ")
-			testFile.write(variableType.capitalize() + "();\n\t\t")
+			testVar = "test" + variable[0].capitalize() + variable[1:]
+			testFile.write(variableType[0].capitalize() + variableType[1:] + " " + testVar + " = new ")
+			testFile.write(variableType[0].capitalize() + variableType[1:] + "();\n\t\t")
 			testFile.write(className + ".set" + variable + "(" + testVar + ");\n\t")
 		testFile.write("\tassertThat(" +  className + ".get" + variable + "(), is());\n\t")
 		testFile.write("}\n\n")
