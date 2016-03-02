@@ -56,7 +56,7 @@ for line in array:
 			testFile.write("testList.add(new " + objectListed + "());\n\t\t")
 			testFile.write(className + ".set" + variable + "(testList);\n\t")
 		elif (re.match('Set(\W)(\S+)(\W)',variableType)):
-			objectListed = re.match('Set\W)(\S+)(\W)',variableType).group(2)
+			objectListed = re.match('Set(\W)(\S+)(\W)',variableType).group(2)
 			testFile.write("Set< + " + objectListed + "> testSet = new HashSet<>();\n\t\t") 
 			testFile.write("testSet.add(new " + objectListed + "());\n\t\t")
 			testFile.write(className + ".set" + variable + "(testSet);\n\t")
