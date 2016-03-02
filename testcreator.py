@@ -14,8 +14,8 @@ with open(targetName + ".java", "r") as lines:
 
 testName = targetName
 if (re.match("(.+)/(.+)", targetName)):
-	if (re.match("(\W)(main)(\W)", targetName)):
-		print "gets to replace"
+	if (re.match("(.+)(\W)(main)(\W)(.+)", targetName)):
+		testName = targetName.replace("/main/", "/test/")
 	targetName = re.match("(.+)/(.+)", targetName).group(2)
 
 testName = testName + "Test";
@@ -26,12 +26,12 @@ print testName
 for line in array:
 	if (re.match("package(.+)", line)):
 		testFile.write(line + "\n")
-		testFile.write("import org.junit.Before;\nimport org.junit.Test;\nimport org.mockito.Spy;\n"
+		testFile.write("import org.junit.Before;\nimport org.junit.Test;\n"
 			+ "import org.mockito.MockitoAnnotations;\nimport static org.hamcrest.MatcherAssert.assertThat;\n"
 			+ "import static org.hamcrest.core.Is.is;\nimport java.util.LinkedList;\n\n")
-		testFile.write("public class " + targetName + "Test { " + '\n\t@Spy\n\tprivate ' + targetName + " "
+		testFile.write("public class " + targetName + "Test { " + '\n\tprivate ' + targetName + " "
 		        + className + ";\n\n\t@Before\n\tpublic void setup() " 
-			+ " { MockitoAnnotations.initMocks(this); }\n\n")
+			+ " {\n\t\t" + className + " = new " + targetName + "();\n\t}\n\n")
 	elif (re.match("(\s+)private", line)):	
 		variableType = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)(\W)?(\s=(.+))?', line).group(6)
 		variable = re.search('(\s+)?private( static)?( transient)?( final)?(\W)(\S+)(\[\])?(\W\w+\W)?(\W)?(\w+)(\W)?(\s=(.+))?', line).group(10)
